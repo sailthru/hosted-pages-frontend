@@ -1,11 +1,11 @@
 {
-  "name": "react-boilerplate",
+  "name": "hosted-pages-frontend",
   "engines": {
     "node": "^16.10.0",
     "npm": "^8.0.0"
   },
   "config": {
-    "dev_server_port": "2000"
+    "dev_server_port": "9088"
   },
   "scripts": {
     "dev": "npm run serve",
