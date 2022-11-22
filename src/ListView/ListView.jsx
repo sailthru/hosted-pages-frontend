@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { PageTable } from "./PageTable";
 
 import * as pagesApi from "../core/api";
 
@@ -37,9 +38,11 @@ function ListView() {
     }
 
     return (
-        <div>
-            {loading ? "Loading..." : <h1>Table goes here</h1>}
-        </div>
+        <PageTable
+            loading={loading}
+            pages={Object.values(pageMap)}
+            getPageById={getPageById}
+        />
     );
 }
 
