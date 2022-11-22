@@ -4,8 +4,7 @@ import { ListView } from './ListView/ListView';
 export default function App() {
   return (
     <>
-      <ListView>
-      </ListView>
+      <ListView />
     </>
   );
 }
