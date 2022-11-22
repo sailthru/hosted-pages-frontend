@@ -1,0 +1,165 @@
+version: 2.1
+
+orbs:
+  slack: circleci/slack@4.10.1 # https://circleci.com/developer/orbs/orb/circleci/slack
+  aws-s3: circleci/aws-s3@3.0.0 # https://circleci.com/developer/orbs/orb/circleci/aws-s3
+
+references: # Constants referenced by multiple jobs (think of these as variables)
+  node_image: &node_image
+    docker:
+      - image: node:16.17.0
+
+  node_modules_cache_key: &node_modules_cache_key v1-node-modules-{{ checksum "package-lock.json" }} # bump "v1" if corrupted
+
+  restore_node_modules: &restore_node_modules
+    restore_cache:
+      key: *node_modules_cache_key
+
+  cache_node_modules: &cache_node_modules
+    save_cache:
+      key: *node_modules_cache_key
+      paths:
+        - node_modules
+
+  persist_to_workspace: &persist_to_workspace
+    persist_to_workspace:
+      root: .
+      paths:
+        - .
+
+  attach_workspace: &attach_workspace
+    attach_workspace:
+      at: .
+
+commands: # Implementation details too beefy to be defined in jobs (think of these as functions)
+  generate_release_version:
+    steps:
+      - run:
+          name: Create .env file with release version
+          command: |
+            PKG_NAME=$(node -p -e "require('./package.json').name")
+            if [ -z "$PKG_NAME" ] || [ "$PKG_NAME" = undefined ]; then
+              echo "FATAL - Missing required field 'name' in package.json" 1>&2
+              echo "The 'name' field controls which subdirectory in s3 the artifacts get uploaded to" 1>&2
+              echo "For example, 'name: email-composer' will upload artifacts to 'AWS_S3_BUCKET/email-composer'" 1>&2
+              echo "If you don't want to define a 'name' field in package.json, replace PKG_NAME in the CI config with hardcoded value." 1>&2
+              exit 1
+            fi
+            echo "export PKG_NAME=$PKG_NAME" >> .env
+
+            # PKG_VERSION is unique for every build and enables URL path versioning (instant releases, long cache periods)
+            COMMIT="$(git rev-parse --short "$CIRCLE_SHA1")"
+            PKG_VERSION="${COMMIT}"
+            echo "export PKG_VERSION=$PKG_VERSION" >> .env
+  source_env_variables:
+    steps:
+      - run:
+          name: Source .env file
+          command: |
+            # Pass vars into BASH_ENV so all steps in current job can access them
+            # Read more: https://circleci.com/docs/env-vars
+            cat .env >> "$BASH_ENV"
+  notify_slack: # requires "Slack Notifications" context
+    steps:
+      - run:
+          name: Load slack notification templates
+          command: |
+            if [[ -z "$SUCCESS_TEMPLATE" ]]; then
+              echo "Missing required env variable, 'SUCCESS_TEMPLATE'" 1>&2
+              echo "Double check the 'Slack Notifications' context has been provided to this job" 1>&2
+              exit 1
+            fi
+            echo 'export on_failure=$(echo $FAIL_TEMPLATE | base64 --decode)' >> $BASH_ENV
+            echo 'export on_success=$(echo $SUCCESS_TEMPLATE | base64 --decode)' >> $BASH_ENV
+      - slack/notify:
+          event: fail
+          branch_pattern: main
+          template: on_failure
+      - slack/notify:
+          event: pass
+          branch_pattern: main
+          template: on_success
+
+jobs: # Distinct tasks that make up a CI workflow; can often be run in parallel
+  setup:
+    <<: *node_image
+    steps:
+      - checkout
+      - *restore_node_modules
+      - run: echo "//npm.pkg.github.com/:_authToken=$GH_TOKEN" >> .npmrc # required to install private @sailthru dependencies
+      - run: npm install
+      - *cache_node_modules
+      - generate_release_version
+      - *persist_to_workspace
+
+  build:
+    <<: *node_image
+    steps:
+      - *attach_workspace
+      - source_env_variables
+      - run: npm run build -- --env basePath="$AWS_PUBLIC_URL/$PKG_NAME/$CIRCLE_BRANCH/$PKG_VERSION/"
+      - *persist_to_workspace
+
+  test:
+    <<: *node_image
+    steps:
+      - *attach_workspace
+      - run: npm test
+
+  lint:
+    <<: *node_image
+    steps:
+      - *attach_workspace
+      - run: npm run prettier
+      - run: npm run lint
+
+  upload:
+    <<: *node_image
+    steps:
+      - *attach_workspace
+      - source_env_variables
+      - aws-s3/sync:
+          from: dist
+          to: "$AWS_S3_BUCKET/$PKG_NAME/$CIRCLE_BRANCH/$PKG_VERSION"
+
+  release:
+    <<: *node_image
+    steps:
+      - *attach_workspace
+      - source_env_variables
+      - aws-s3/copy:
+          from: dist/index.html
+          to: "$AWS_S3_BUCKET/$PKG_NAME/$CIRCLE_BRANCH/index.html"
+          arguments: --cache-control no-cache
+#      - notify_slack
+
+workflows: # Orchestrates which jobs run, and in what order, when a change is pushed to remote
+  deploy_prod_s3:
+    jobs:
+      - setup:
+          context:
+            - NEXUS_NPM_WORKFLOW
+      - build:
+          context:
+            - aws-s3-static-my-prod
+          requires:
+            - setup
+      - test:
+          requires:
+            - setup
+      - lint:
+          requires:
+            - setup
+      - upload:
+          context:
+            - aws-s3-static-my-prod
+          requires:
+            - build
+            - test
+            - lint
+      - release:
+          context:
+            - aws-s3-static-my-prod
+            - Slack Notifications
+          requires:
+            - upload
