@@ -4,17 +4,12 @@ import { PageTopPanel } from '@sailthru/stui-regions';
 import { Button } from "@sailthru/stui-elements";
 
 const Header = styled.header`
-    grid-area: header;
-    position: initial;
-    z-index: auto;
     margin-bottom: 10px;
 `;
 
 const NewButton = styled.div`
-    display: flex;
     position: absolute;
     right: 20px;
-    z-index: 2;
 `;
 
 function handleCreate() {
