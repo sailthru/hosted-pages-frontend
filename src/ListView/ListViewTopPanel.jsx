@@ -5,6 +5,7 @@ import { Button } from "@sailthru/stui-elements";
 
 const Header = styled.header`
     margin-bottom: 10px;
+    z-index: auto;
 `;
 
 const NewButton = styled.div`
