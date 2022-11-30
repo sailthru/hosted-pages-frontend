@@ -1,6 +1,7 @@
 import React from "react";
 import { Table } from "@sailthru/stui-components";
 import PageTableActions from "./PageTableActions";
+import PageTableNames from "./PageTableNames";
 
 
 /** Configures STUI Table to render data in columns */
@@ -27,28 +28,8 @@ function PageTable({ loading, pages, getPageById, displayModal }) {
     },
     {
       Header: "Page Name",
-      accessor: (p) => p.pageId,
-      Cell: function ({ cell }) {
-        const pageId = cell.value;
-        const page = getPageById(pageId);
-        const htmlPageUrl = `/page?page_id=${pageId}`;
-        const visualPageUrl = "/hosted-pages-list"; // TODO add click through see EPT-1713
-        if (page.mode == "visual") {
-          return (
-            <a target="_self" href={visualPageUrl}>
-              {" "}
-              {page.name}{" "}
-            </a>
-          );
-        } else {
-          return (
-            <a target="_self" href={htmlPageUrl}>
-              {" "}
-              {page.name}{" "}
-            </a>
-          );
-        }
-      },
+      accessor: (p) => p,
+      Cell: (cell) => (<PageTableNames page={cell.value} />)
     },
     {
       Header: "URL",
