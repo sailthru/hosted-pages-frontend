@@ -2,6 +2,7 @@ import React from "react";
 import { Table } from "@sailthru/stui-components";
 import PageTableActions from "./PageTableActions";
 import PageTableNames from "./PageTableNames";
+import PageTableIcons from "./PageTableIcons";
 
 
 /** Configures STUI Table to render data in columns */
@@ -9,22 +10,10 @@ function PageTable({ loading, pages, getPageById, displayModal }) {
   const columns = [
     {
       id: "page-mode-icons",
-      accessor: (p) => p.pageId,
+      accessor: (p) => p,
       width: 20,
       disableSortBy: true,
-      Cell: function ({ cell }) {
-        const pageId = cell.value;
-        const page = getPageById(pageId);
-        if (page.mode == "visual") {
-          return <i className="fal fa-pencil-ruler" title="Visual Template" />;
-        } else {
-          return (
-            <>
-              <i className="fal fa-code" title="HTML Template" />
-            </>
-          );
-        }
-      },
+      Cell: (cell) => (<PageTableIcons page={cell.value} />)
     },
     {
       Header: "Page Name",
