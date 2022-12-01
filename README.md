@@ -1,5 +1,8 @@
-# New React repo boilerplate
+# Hosted Pages Frontend
 
-This is a sample React project that's used as a template for new front-end applications.
+React app to display the list of hosted pages
 
-For setup instructions, see https://sailthru.atlassian.net/wiki/spaces/SE/pages/2620325889/Create+a+new+react+app
+Running Locally:
+1. `nvm use 16`
+2. First time setup only: `npm install`
+3. `npm run dev`
