@@ -14,16 +14,16 @@
  *   http.delete("uiapi/templates/3415123");
  */
 export async function http(url, requestOptions = {}) {
-    const DefaultRequestOptions = {
-        headers: {
-            Accept: "application/json, text/javascript, */*; q=0.01",
-            "Content-Type": "application/json; charset=UTF-8",
-        },
-        credentials: "same-origin",
-    };
-    const config = Object.assign({}, DefaultRequestOptions, requestOptions);
-    const res = await fetch(url, config);
-    return verifyResponse(res);
+  const DefaultRequestOptions = {
+    headers: {
+      Accept: "application/json, text/javascript, */*; q=0.01",
+      "Content-Type": "application/json; charset=UTF-8",
+    },
+    credentials: "same-origin",
+  };
+  const config = Object.assign({}, DefaultRequestOptions, requestOptions);
+  const res = await fetch(url, config);
+  return verifyResponse(res);
 }
 
 http.get = createShortMethod("GET");
@@ -39,11 +39,11 @@ http.patch = createShortMethodForData("PATCH");
  * Throws if response is not OK.
  */
 async function verifyResponse(res) {
-    const body = await res.json();
-    if (!res.ok) {
-        throw body;
-    }
-    return body;
+  const body = await res.json();
+  if (!res.ok) {
+    throw body;
+  }
+  return body;
 }
 
 /**
@@ -58,15 +58,15 @@ async function verifyResponse(res) {
  *  http.delete('uiapi/templates/123');
  */
 function createShortMethod(method) {
-    return function (url, queryParams = {}, requestOptions = {}) {
-        if (queryParams != null && Object.keys(queryParams).length) {
-            url += stringify(queryParams);
-        }
-        return http(url, {
-            ...requestOptions,
-            method: method,
-        });
-    };
+  return function (url, queryParams = {}, requestOptions = {}) {
+    if (queryParams != null && Object.keys(queryParams).length) {
+      url += stringify(queryParams);
+    }
+    return http(url, {
+      ...requestOptions,
+      method: method,
+    });
+  };
 }
 
 /**
@@ -76,19 +76,19 @@ function createShortMethod(method) {
  *  http.post('uiapi/templates', { name: 'new template name' });
  */
 function createShortMethodForData(method) {
-    return function (url, data = "", requestOptions = {}, queryParams = {}) {
-        if (queryParams != null && Object.keys(queryParams).length) {
-            url += stringify(queryParams);
-        }
-        if (typeof data !== "string") {
-            data = JSON.stringify(data);
-        }
-        return http(url, {
-            ...requestOptions,
-            method: method,
-            body: data,
-        });
-    };
+  return function (url, data = "", requestOptions = {}, queryParams = {}) {
+    if (queryParams != null && Object.keys(queryParams).length) {
+      url += stringify(queryParams);
+    }
+    if (typeof data !== "string") {
+      data = JSON.stringify(data);
+    }
+    return http(url, {
+      ...requestOptions,
+      method: method,
+      body: data,
+    });
+  };
 }
 
 /**
@@ -97,17 +97,17 @@ function createShortMethodForData(method) {
  * @returns {string}
  */
 function stringify(queryParams) {
-    return Object.keys(queryParams).reduce((accum, key, i) => {
-        if (i === 0) {
-            accum += "?";
-        } else {
-            accum += "&";
-        }
-        const val = queryParams[key];
-        accum += `${key}`;
-        if (val != null) {
-            accum += `=${encodeURIComponent(val)}`;
-        }
-        return accum;
-    }, "");
+  return Object.keys(queryParams).reduce((accum, key, i) => {
+    if (i === 0) {
+      accum += "?";
+    } else {
+      accum += "&";
+    }
+    const val = queryParams[key];
+    accum += `${key}`;
+    if (val != null) {
+      accum += `=${encodeURIComponent(val)}`;
+    }
+    return accum;
+  }, "");
 }
