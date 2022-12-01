@@ -8,7 +8,7 @@ const Header = styled.header`
     z-index: auto;
 `;
 
-const NewButton = styled.div`
+const StyledButton = styled(Button)`
     position: absolute;
     right: 20px;
 `;
@@ -23,11 +23,9 @@ const ListViewTopPanel = () => (
             title="Hosted Pages"
             backgroundColor="dark"
         >
-            <NewButton>
-                <Button onClick={handleCreate}>
-                    New Page
-                </Button>
-            </NewButton>
+            <StyledButton onClick={handleCreate}>
+                New Page
+            </StyledButton>
         </PageTopPanel>
     </Header>
 );
