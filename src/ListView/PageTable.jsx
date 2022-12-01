@@ -59,7 +59,7 @@ function PageTable({ loading, pages, getPageById, displayModal }) {
           <div>
             {" "}
             {cell.value.url_display}{" "}
-            <a target="_blank" href={cell.value.url}>
+            <a target="_blank" href={cell.value.url} rel="noreferrer">
               <i className="fas fa-external-link-alt" title="Live Page" />
             </a>
           </div>
