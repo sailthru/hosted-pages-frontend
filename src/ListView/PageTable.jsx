@@ -29,26 +29,8 @@ function PageTable({ loading, pages, getPageById, displayModal }) {
       },
       {
         Header: "Page Name",
-        accessor: (p) => p.pageId,
-        Cell: function ({ cell }) {
-          const pageId = cell.value;
-          const page = getPageById(pageId);
-          const htmlPageUrl = `/page?page_id=${pageId}`;
-          const visualPageUrl = "/hosted-pages-list"; // TODO add click through see EPT-1713
-          if (page.mode == "visual") {
-            return (
-              <a target="_self" href={visualPageUrl}>
-                {page.name}
-              </a>
-            );
-          } else {
-            return (
-              <a target="_self" href={htmlPageUrl}>
-                {page.name}
-              </a>
-            );
-          }
-        },
+        accessor: (p) => p,
+        Cell: (cell) => pageModeUrl(cell.value),
       },
       {
         Header: "URL",
@@ -58,9 +40,8 @@ function PageTable({ loading, pages, getPageById, displayModal }) {
         Cell: function ({ cell }) {
           return (
             <div>
-              {" "}
-              {cell.value.url_display}{" "}
-              <a target="_blank" href={cell.value.url}>
+              {cell.value.url_display}
+              <a target="_blank" href={cell.value.url} rel="noreferrer">
                 <i className="fas fa-external-link-alt" title="Live Page" />
               </a>
             </div>
@@ -135,3 +116,21 @@ function PageTable({ loading, pages, getPageById, displayModal }) {
 }
 
 export { PageTable };
+
+function pageModeUrl(page) {
+  const htmlPageUrl = `/page?page_id=${page.pageId}`; // TODO add click through see EPT-1713
+  const visualPageUrl = "/hosted-pages-list";
+  if (page.mode == "visual") {
+    return (
+      <a target="_self" href={visualPageUrl}>
+        {page.name}
+      </a>
+    );
+  } else {
+    return (
+      <a target="_self" href={htmlPageUrl}>
+        {page.name}
+      </a>
+    );
+  }
+}
