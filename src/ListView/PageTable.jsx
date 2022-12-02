@@ -1,9 +1,10 @@
 import React from "react";
 
-import { Table, HoverDisclosure, OptionsMenu } from "@sailthru/stui-components";
+import { Table } from "@sailthru/stui-components";
+import PageTableHoverOptions from "./PageTableHoverOptions";
 
 /** Configures STUI Table to render data in columns */
-function PageTable({ loading, pages, getPageById, displayModal }) {
+function PageTable({ loading, pages, getPageById }) {
   const columns = React.useMemo(
     () => [
       {
@@ -29,8 +30,22 @@ function PageTable({ loading, pages, getPageById, displayModal }) {
       },
       {
         Header: "Page Name",
-        accessor: (p) => p,
-        Cell: (cell) => pageModeUrl(cell.value),
+        accessor: (p) => p.pageId,
+        Cell: function ({ cell }) {
+          const pageId = cell.value;
+          const page = getPageById(pageId);
+          return (
+            <>
+              <a
+                target="_self"
+                href={pageEditorUrl(page.pageId, page.mode)}
+                rel="noreferrer"
+              >
+                {page.name}
+              </a>
+            </>
+          );
+        },
       },
       {
         Header: "URL",
@@ -39,12 +54,12 @@ function PageTable({ loading, pages, getPageById, displayModal }) {
         width: 200,
         Cell: function ({ cell }) {
           return (
-            <div>
-              {cell.value.url_display}
+            <>
+              {cell.value.url_display}{" "}
               <a target="_blank" href={cell.value.url} rel="noreferrer">
                 <i className="fas fa-external-link-alt" title="Live Page" />
               </a>
-            </div>
+            </>
           );
         },
       },
@@ -63,36 +78,15 @@ function PageTable({ loading, pages, getPageById, displayModal }) {
       },
       {
         id: "id",
-        accessor: (p) => p.pageId,
+        accessor: (p) => p,
         width: 0.2,
         disableSortBy: true,
-        Cell: function ({ cell }) {
-          const pageId = cell.value;
-          const clickOptions = [
-            {
-              label: "Edit",
-              icon: "fal fa-edit fa-fw",
-              iconHover: "fas fa-edit fa-fw",
-              onClick: () => window.open(`/page?page_id=${pageId}`, "_self"), // TODO see EPT-1713 (add routing?)
-            },
-            {
-              label: "Delete",
-              icon: "fal fa-trash fa-fw",
-              iconHover: "fal fa-trash fa-fw",
-              onClick: () => {
-                console.log("Deleting", pageId);
-                displayModal({
-                  // TODO see EPT-1713
-                });
-              },
-            },
-          ];
-          return (
-            <HoverDisclosure disclosureWidth="150px">
-              <OptionsMenu options={clickOptions} />
-            </HoverDisclosure>
-          );
-        },
+        Cell: (cell) => (
+          <PageTableHoverOptions
+            pageId={cell.value.pageId}
+            pageEditorUrl={pageEditorUrl(cell.value.pageId, cell.value.mode)}
+          />
+        ),
       },
     ],
     [pages]
@@ -117,20 +111,12 @@ function PageTable({ loading, pages, getPageById, displayModal }) {
 
 export { PageTable };
 
-function pageModeUrl(page) {
-  const htmlPageUrl = `/page?page_id=${page.pageId}`; // TODO add click through see EPT-1713
+export function pageEditorUrl(pageId, pageMode) {
+  const htmlPageUrl = `/page?page_id=${pageId}`; // TODO add click through see EPT-1713
   const visualPageUrl = "/hosted-pages-list";
-  if (page.mode == "visual") {
-    return (
-      <a target="_self" href={visualPageUrl}>
-        {page.name}
-      </a>
-    );
+  if (pageMode == "visual") {
+    return visualPageUrl;
   } else {
-    return (
-      <a target="_self" href={htmlPageUrl}>
-        {page.name}
-      </a>
-    );
+    return htmlPageUrl;
   }
 }
