@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { PageTable } from "./PageTable";
 
 import * as pagesApi from "../core/api";
+import {ListViewLayout} from "./ListViewLayout";
 
 function ListView() {
   const [loading, setLoading] = useState(true); // load from the start to prevent blip
@@ -38,11 +39,13 @@ function ListView() {
   }
 
   return (
-    <PageTable
-      loading={loading}
-      pages={Object.values(pageMap)}
-      getPageById={getPageById}
-    />
+      <ListViewLayout>
+          <PageTable
+              loading={loading}
+              pages={Object.values(pageMap)}
+              getPageById={getPageById}
+          />
+      </ListViewLayout>
   );
 }
 
