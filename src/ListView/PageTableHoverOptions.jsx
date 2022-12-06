@@ -29,4 +29,4 @@ const PageTableHoverOptions = ({ pageId, pageEditorUrl }) => {
   );
 };
 
-export default PageTableHoverOptions;
+export { PageTableHoverOptions };

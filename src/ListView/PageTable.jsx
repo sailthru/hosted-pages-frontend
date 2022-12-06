@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Table } from "@sailthru/stui-components";
-import PageTableHoverOptions from "./PageTableHoverOptions";
+import { PageTableHoverOptions } from "./PageTableHoverOptions";
 
 /** Configures STUI Table to render data in columns */
 function PageTable({ loading, pages, getPageById }) {
