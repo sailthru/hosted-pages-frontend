@@ -36,11 +36,7 @@ function PageTable({ loading, pages, getPageById }) {
           const page = getPageById(pageId);
           return (
             <>
-              <a
-                target="_self"
-                href={page.editorUrl}
-                rel="noreferrer"
-              >
+              <a target="_self" href={page.editorUrl} rel="noreferrer">
                 {page.name}
               </a>
             </>
