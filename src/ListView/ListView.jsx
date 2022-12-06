@@ -13,7 +13,7 @@ function ListView() {
       .fetchPages()
       .then((res) => {
         const map = res.reduce((accum, curr) => {
-          const pageId = curr?.id;
+            const pageId = curr?.id;
           if (pageId != null) {
             accum[pageId] = {
               pageId: pageId,
@@ -23,6 +23,7 @@ function ListView() {
               url: curr.url,
               modifyUser: curr.modify_user,
               modifyTime: curr.modify_time,
+              editorUrl: curr.editor_url,
             };
           }
           return accum;

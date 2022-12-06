@@ -38,7 +38,7 @@ function PageTable({ loading, pages, getPageById }) {
             <>
               <a
                 target="_self"
-                href={pageEditorUrl(page.pageId, page.mode)}
+                href={page.editorUrl}
                 rel="noreferrer"
               >
                 {page.name}
@@ -84,7 +84,7 @@ function PageTable({ loading, pages, getPageById }) {
         Cell: (cell) => (
           <PageTableHoverOptions
             pageId={cell.value.pageId}
-            pageEditorUrl={pageEditorUrl(cell.value.pageId, cell.value.mode)}
+            pageEditorUrl={cell.value.editorUrl}
           />
         ),
       },
@@ -110,13 +110,3 @@ function PageTable({ loading, pages, getPageById }) {
 }
 
 export { PageTable };
-
-export function pageEditorUrl(pageId, pageMode) {
-  const htmlPageUrl = `/page?page_id=${pageId}`; // TODO add click through see EPT-1713
-  const visualPageUrl = "/hosted-pages-list";
-  if (pageMode == "visual") {
-    return visualPageUrl;
-  } else {
-    return htmlPageUrl;
-  }
-}
