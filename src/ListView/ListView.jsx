@@ -23,6 +23,7 @@ function ListView() {
               url: curr.url,
               modifyUser: curr.modify_user,
               modifyTime: curr.modify_time,
+              editorUrl: curr.editor_url,
             };
           }
           return accum;

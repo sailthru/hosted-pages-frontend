@@ -9,4 +9,8 @@ Running Locally:
 
 
 Note: If the lint job fails in CI, you can run the following:
+for prettier specific errors:
 `npm run prettier-write`
+
+for lint errors:
+`npm run lint -- --fix`
