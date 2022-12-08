@@ -12,7 +12,7 @@ const PageTableHoverOptions = ({ pageId, pageEditorUrl }) => {
     {
       label: "Delete",
       icon: "fal fa-trash fa-fw",
-      iconHover: "fal fa-trash fa-fw",
+      iconHover: "fas fa-trash fa-fw",
       onClick: () => {
         console.log("Deleting", pageId);
         //         displayModal({
