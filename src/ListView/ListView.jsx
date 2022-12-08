@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import { PageTable } from "./PageTable";
 import { ListViewLayout } from "./ListViewLayout";
 
@@ -7,8 +7,8 @@ import * as pagesApi from "../core/pagesApi";
 function ListView() {
   const [loading, setLoading] = useState(true); // load from the start to prevent blip
   const [pageMap, setPageMap] = useState({});
+  const pagesData = useMemo(() => [...Object.values(pageMap)], [Object.values(pageMap)]);
   useEffect(getPages, []);
-
   function getPages() {
     pagesApi
       .fetchPages()
@@ -43,7 +43,7 @@ function ListView() {
     <ListViewLayout>
       <PageTable
         loading={loading}
-        pages={Object.values(pageMap)}
+        pages={pagesData}
         getPageById={getPageById}
       />
     </ListViewLayout>
