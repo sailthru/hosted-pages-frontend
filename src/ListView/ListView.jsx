@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { PageTable } from "./PageTable";
 import { ListViewLayout } from "./ListViewLayout";
 
-import * as pagesApi from "../core/api";
+import * as pagesApi from "../core/pagesApi";
 
 function ListView() {
   const [loading, setLoading] = useState(true); // load from the start to prevent blip
