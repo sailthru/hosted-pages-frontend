@@ -1,29 +1,38 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
-import { Modal } from "@sailthru/stui-components";
+import { Modal, Notification } from "@sailthru/stui-components";
 import * as pagesApi from "../../../core/api";
 import { CreatePageForm } from "./CreatePageForm";
 
 function CreatePageModal({ title, mode, setDisplayModal }) {
   const [state, setState] = useState({});
-  const [disableSubmitButton, setDisableSubmitButton] = useState(false);
   const [error, setError] = useState(false);
 
-  function handleSubmit(done) {
-    //FIXME
-    setDisableSubmitButton(true);
+  function handleCreate() {
     pagesApi
       .createPage({ ...state, mode })
-      .then(done)
-      .catch((e) => setError(true));
-    //             .finally(setDisplayModal((state) => !state))
+      .then(function (response) {
+        console.log("RESPONSE", response);
+      })
+      .catch(function (serverError) {
+        alert(JSON.stringify(serverError));
+        console.log("ERROR:", serverError);
+        setError(true);
+      });
+    // TODO add error handling
   }
-  useEffect(() => {
-    setDisableSubmitButton(false);
-    if (!state.name || !state.type) {
-      setDisableSubmitButton(true);
+
+  function handleSubmit() {
+    handleCreate().then();
+    // TODO add redirect etc
+  }
+
+  const getSubmitButtonText = () => {
+    if (error) {
+      return "Retry Create";
     }
-  });
+    return "Create";
+  };
 
   function handleFormChange(changedField) {
     const newState = Object.assign({}, state, changedField);
@@ -34,16 +43,18 @@ function CreatePageModal({ title, mode, setDisplayModal }) {
   return (
     <Modal
       title={title}
-      applyButtonText="Create"
-      disableApply={disableSubmitButton}
+      applyButtonText={getSubmitButtonText()}
+      disableApply={!state.name || !state.type}
       onApply={handleSubmit}
       onDismiss={() => setDisplayModal(false)}
     >
-      <CreatePageForm
-        name={state.name}
-        type={state.type}
-        onChange={handleFormChange}
-      />
+      {error && (
+        <Notification type="error">
+          An error occurred and the page could not be created. Please try again
+          or contact support if the issue persists.
+        </Notification>
+      )}
+      <CreatePageForm name={state.name} onChange={handleFormChange} />
     </Modal>
   );
 }

@@ -3,7 +3,7 @@ import React from "react";
 import { FormGroup, Radio, RadioGroup } from "@sailthru/stui-components";
 import { Fieldset, Label, Input } from "@sailthru/stui-elements";
 
-function CreatePageForm({ name = "", type = "", onChange }) {
+function CreatePageForm({ name = "", onChange }) {
   return (
     <Fieldset>
       <FormGroup>
@@ -17,7 +17,7 @@ function CreatePageForm({ name = "", type = "", onChange }) {
           <Radio
             id="signup"
             name="category"
-            value="join"
+            value="signup"
             onChange={(e) => onChange({ type: e.target.value })}
           >
             Signup
@@ -33,7 +33,7 @@ function CreatePageForm({ name = "", type = "", onChange }) {
           <Radio
             id="other"
             name="category"
-            value="page"
+            value="other"
             onChange={(e) => onChange({ type: e.target.value })}
           >
             Other
