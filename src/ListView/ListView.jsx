@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { PageTable } from "./PageTable";
 import { CreatePageModal } from "./features/CreatePage/CreatePageModal";
 
@@ -10,6 +10,10 @@ import { ModalWrapper } from "@sailthru/stui-components";
 function ListView() {
   const [loading, setLoading] = useState(true); // load from the start to prevent blip
   const [pageMap, setPageMap] = useState({});
+  const pagesData = useMemo(
+    () => [...Object.values(pageMap)],
+    [Object.values(pageMap)]
+  );
   const [displayModal, setDisplayModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [mode, setMode] = useState();
@@ -63,7 +67,7 @@ function ListView() {
       >
         <PageTable
           loading={loading}
-          pages={Object.values(pageMap)}
+          pages={pagesData}
           getPageById={getPageById}
         />
       </ListLayout>
