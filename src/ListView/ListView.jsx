@@ -3,8 +3,8 @@ import { PageTable } from "./PageTable";
 import { CreatePageModal } from "./features/CreatePage/CreatePageModal";
 
 import * as pagesApi from "../core/pagesApi";
-import {ListLayout} from "@sailthru/stui-layouts";
-import {Button} from "@sailthru/stui-elements";
+import { ListLayout } from "@sailthru/stui-layouts";
+import { Button } from "@sailthru/stui-elements";
 import { ModalWrapper } from "@sailthru/stui-components";
 
 function ListView() {
@@ -46,36 +46,36 @@ function ListView() {
   }
 
   return (
-      <>
+    <>
       <ListLayout
-          pageTitle="Hosted Pages"
-          cta={
-              <Button
-                  onClick={() => {
-                      setModalTitle(() => "New HTML Page");
-                      setMode(() => "html");
-                      setDisplayModal((state) => !state);
-                  }}
-              >
-                  New Page
-              </Button>
-          }
+        pageTitle="Hosted Pages"
+        cta={
+          <Button
+            onClick={() => {
+              setModalTitle(() => "New HTML Page");
+              setMode(() => "html");
+              setDisplayModal((state) => !state);
+            }}
+          >
+            New Page
+          </Button>
+        }
       >
-    <PageTable
-      loading={loading}
-      pages={Object.values(pageMap)}
-      getPageById={getPageById}
-    />
+        <PageTable
+          loading={loading}
+          pages={Object.values(pageMap)}
+          getPageById={getPageById}
+        />
       </ListLayout>
 
-    <ModalWrapper display={displayModal}>
+      <ModalWrapper display={displayModal}>
         <CreatePageModal
-            title={modalTitle}
-            mode={mode}
-            setDisplayModal={setDisplayModal}
+          title={modalTitle}
+          mode={mode}
+          setDisplayModal={setDisplayModal}
         />
-    </ModalWrapper>
-      </>
+      </ModalWrapper>
+    </>
   );
 }
 
