@@ -8,9 +8,15 @@ import {
 } from "@sailthru/stui-components";
 import { Fieldset, Label, Input } from "@sailthru/stui-elements";
 
-function CreatePageForm({ name = "", onChange, isDuplicateName }) {
+function CreatePageForm({
+  name = "",
+  onChange,
+  isDuplicateName,
+  isNameChanged,
+}) {
   const [namingError, setNamingError] = useState(false);
 
+  // function to check for empty or alphanumeric page names
   const handleNamingError = function () {
     setNamingError("");
     const alphanumericRegex = /^\d*[a-zA-Z][a-zA-Z0-9]*$/;
@@ -27,11 +33,20 @@ function CreatePageForm({ name = "", onChange, isDuplicateName }) {
     return;
   };
 
+  // sets the error if the name is a duplicate (returned from the backend)
   useEffect(() => {
     if (isDuplicateName) {
       setNamingError(isDuplicateName);
     }
   }, [isDuplicateName]);
+
+  // function to reset the name error when the name is changed
+  const onChangeResetNamingError = (e) => {
+    if (isNameChanged) {
+      setNamingError(false);
+    }
+    onChange({ name: e.target.value });
+  };
 
   return (
     <Fieldset>
@@ -40,7 +55,7 @@ function CreatePageForm({ name = "", onChange, isDuplicateName }) {
         <Input
           autoFocus
           value={name}
-          onChange={(e) => onChange({ name: e.target.value })}
+          onChange={onChangeResetNamingError}
           onBlur={handleNamingError}
           error={namingError}
         />

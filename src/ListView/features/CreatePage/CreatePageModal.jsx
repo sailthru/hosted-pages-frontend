@@ -11,6 +11,7 @@ function CreatePageModal({ title, mode, setDisplayModal }) {
   useEffect(() => {
     setIsDuplicateName(false);
   }, [isDuplicateName]);
+  const [isNameChanged, setIsNameChanged] = useState(false);
 
   function handleCreate() {
     pagesApi
@@ -52,8 +53,12 @@ function CreatePageModal({ title, mode, setDisplayModal }) {
 
   function handleFormChange(changedField) {
     const newState = Object.assign({}, state, changedField);
+    const changedFieldKeys = Object.keys(changedField);
     setError(false);
     setState(newState);
+    if (changedFieldKeys.includes("name")) {
+      setIsNameChanged(true);
+    }
   }
 
   return (
@@ -69,6 +74,7 @@ function CreatePageModal({ title, mode, setDisplayModal }) {
         name={state.name}
         onChange={handleFormChange}
         isDuplicateName={isDuplicateName}
+        isNameChanged={isNameChanged}
       />
     </Modal>
   );
