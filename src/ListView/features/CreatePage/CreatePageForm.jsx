@@ -49,7 +49,7 @@ function CreatePageForm({ name = "", onChange, isDuplicateName }) {
         ) : null}
         <Subtext>
           Page name must follow URL standards and only contain alphanumeric
-          characters and dashes. It's recommended to use dashes instead of
+          characters and dashes. It is recommended to use dashes instead of
           spaces.
         </Subtext>
         <Label>Category</Label>
