@@ -15,6 +15,7 @@ function CreatePageForm({
   isNameChanged,
 }) {
   const [namingError, setNamingError] = useState(false);
+  const [optoutNamingError, setOptoutNamingError] = useState(false);
 
   // function to check for empty, alphanumeric, and 'oc' page names
   const handleNamingError = function () {
@@ -29,13 +30,20 @@ function CreatePageForm({
       setNamingError("Page names must be alphanumeric.");
       return;
     }
-    if (name == "oc") {
+    if (name === "oc") {
       setNamingError(
-        "'oc' is a reserved page name. Please select a unique page name."
+        "The page name 'oc' is a reserved page name. Please select a new page name."
+      );
+      return;
+    }
+    if (name == "optout") {
+      setOptoutNamingError(
+        "The page name 'optout' requires 'User Management' as the category. Please select 'User Management' below."
       );
       return;
     }
     setNamingError(false);
+    setOptoutNamingError(false);
     return;
   };
 
@@ -74,12 +82,15 @@ function CreatePageForm({
           spaces.
         </Subtext>
         <Label>Category</Label>
+        {optoutNamingError ? (
+          <p style={{ color: colorTextErrorOnLight }}>{optoutNamingError}</p>
+        ) : null}
         <RadioGroup>
           <Radio
             id="signup"
             name="category"
             value="signup"
-            disabled={namingError}
+            disabled={namingError || optoutNamingError}
             onChange={(e) => onChange({ type: e.target.value })}
           >
             Signup
@@ -89,7 +100,10 @@ function CreatePageForm({
             name="category"
             value="manage"
             disabled={namingError}
-            onChange={(e) => onChange({ type: e.target.value })}
+            onChange={(e) => {
+              onChange({ type: e.target.value });
+              setOptoutNamingError(" ");
+            }}
           >
             User Management
           </Radio>
@@ -97,7 +111,7 @@ function CreatePageForm({
             id="other"
             name="category"
             value="other"
-            disabled={namingError}
+            disabled={namingError || optoutNamingError}
             onChange={(e) => onChange({ type: e.target.value })}
           >
             Other
