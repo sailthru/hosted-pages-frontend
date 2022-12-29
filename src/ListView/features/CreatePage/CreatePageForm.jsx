@@ -16,7 +16,7 @@ function CreatePageForm({
 }) {
   const [namingError, setNamingError] = useState(false);
 
-  // function to check for empty or alphanumeric page names
+  // function to check for empty, alphanumeric, and 'oc' page names
   const handleNamingError = function () {
     setNamingError("");
     const alphanumericRegex = /^\d*[a-zA-Z][a-zA-Z0-9]*$/;
@@ -27,6 +27,12 @@ function CreatePageForm({
     }
     if (!allowDashInName.match(alphanumericRegex)) {
       setNamingError("Page names must be alphanumeric.");
+      return;
+    }
+    if (name == "oc") {
+      setNamingError(
+        "'oc' is a reserved page name. Please select a unique page name."
+      );
       return;
     }
     setNamingError(false);
