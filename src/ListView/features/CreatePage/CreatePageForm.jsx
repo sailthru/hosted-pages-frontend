@@ -58,6 +58,7 @@ function CreatePageForm({ name = "", onChange, isDuplicateName }) {
             id="signup"
             name="category"
             value="signup"
+            disabled={namingError}
             onChange={(e) => onChange({ type: e.target.value })}
           >
             Signup
@@ -66,6 +67,7 @@ function CreatePageForm({ name = "", onChange, isDuplicateName }) {
             id="manage"
             name="category"
             value="manage"
+            disabled={namingError}
             onChange={(e) => onChange({ type: e.target.value })}
           >
             User Management
@@ -74,6 +76,7 @@ function CreatePageForm({ name = "", onChange, isDuplicateName }) {
             id="other"
             name="category"
             value="other"
+            disabled={namingError}
             onChange={(e) => onChange({ type: e.target.value })}
           >
             Other
