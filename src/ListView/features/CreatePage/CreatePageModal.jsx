@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Modal, Notification } from "@sailthru/stui-components";
 import * as pagesApi from "../../../core/pagesApi";
@@ -8,6 +8,9 @@ function CreatePageModal({ title, mode, setDisplayModal }) {
   const [state, setState] = useState({});
   const [error, setError] = useState(false);
   const [isDuplicateName, setIsDuplicateName] = useState(false);
+  useEffect(() => {
+    setIsDuplicateName(false);
+  }, [isDuplicateName]);
 
   function handleCreate() {
     pagesApi
@@ -30,12 +33,7 @@ function CreatePageModal({ title, mode, setDisplayModal }) {
           serverErrorMessage &&
           serverErrorMessage.includes(duplicateNameError)
         ) {
-          // TODO Only set one of these errors
-          // problem: isDuplicateName is only set on first render
-          // if user selects a different name that is also a duplicate
-          // isDuplicateName will not be shown
           setIsDuplicateName("Unique page name required.");
-          setError("Unique page name required.");
         } else {
           console.log("ERROR: ", serverError.error_message);
           setError(
