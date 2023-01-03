@@ -20,13 +20,13 @@ function CreatePageForm({
   // function to check for empty, alphanumeric, and 'oc' page names
   const handleNamingError = function () {
     setNamingError("");
-    const alphanumericRegex = /^\d*[a-zA-Z][a-zA-Z0-9]*$/;
+    const alphanumericRegex = /^\d*[a-zA-Z0-9][a-zA-Z0-9]*$/;
     const allowDashInName = name.replace("-", "");
     if (name.length < 1) {
       setNamingError("Please enter a page name.");
       return;
     }
-    if (!allowDashInName.match(alphanumericRegex)) {
+    if (!alphanumericRegex.match(allowDashInName)) {
       setNamingError("Page names must be alphanumeric.");
       return;
     }
