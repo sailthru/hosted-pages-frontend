@@ -21,12 +21,12 @@ function CreatePageForm({
   const handleNamingError = function () {
     setNamingError("");
     const alphanumericRegex = /^\d*[a-zA-Z0-9][a-zA-Z0-9]*$/;
-    const allowDashInName = name.replace("-", "");
+    const allowDashInName = name.replace(new RegExp("-", "g"), "");
     if (name.length < 1) {
       setNamingError("Please enter a page name.");
       return;
     }
-    if (!alphanumericRegex.match(allowDashInName)) {
+    if (!allowDashInName.match(alphanumericRegex)) {
       setNamingError("Page names must be alphanumeric.");
       return;
     }
