@@ -14,12 +14,11 @@ function CreatePageForm({
   isDuplicateName,
   isNameChanged,
 }) {
-  const [namingError, setNamingError] = useState(false);
-  const [optoutNamingError, setOptoutNamingError] = useState(false);
+  const [namingError, setNamingError] = useState("");
+  const [optoutNamingError, setOptoutNamingError] = useState("");
 
   // function to check for empty, alphanumeric, and 'oc' page names
   const handleNamingError = function () {
-    setNamingError("");
     const alphanumericRegex = /^\d*[a-zA-Z0-9][a-zA-Z0-9]*$/;
     const allowDashInName = name.replace(new RegExp("-", "g"), "");
     if (name.length < 1) {
@@ -44,9 +43,6 @@ function CreatePageForm({
       );
       return;
     }
-    setNamingError(false);
-    setOptoutNamingError(false);
-    return;
   };
 
   // sets the error if the name is a duplicate (returned from the backend)
@@ -59,7 +55,7 @@ function CreatePageForm({
   // function to reset the name error when the name is changed
   const onChangeResetNamingError = (e) => {
     if (isNameChanged) {
-      setNamingError(false);
+      setNamingError("");
     }
     onChange({ name: e.target.value });
   };
