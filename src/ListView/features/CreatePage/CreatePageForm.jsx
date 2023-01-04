@@ -19,16 +19,10 @@ function CreatePageForm({
 
   // function to check for empty, alphanumeric, and 'oc' page names
   const handleNamingError = function () {
-    const alphanumericRegex = /^\d*[a-zA-Z0-9][a-zA-Z0-9]*$/;
-    const allowDashInName = name.replace(new RegExp("-", "g"), "");
+    setNamingError("");
+    setOptoutNamingError("");
     if (name.length < 1) {
       setNamingError("Please enter a page name.");
-      return;
-    }
-    if (!allowDashInName.match(alphanumericRegex)) {
-      setNamingError(
-        "Page names can only contain alphanumeric characters and dashes."
-      );
       return;
     }
     if (name === "oc") {
@@ -40,6 +34,14 @@ function CreatePageForm({
     if (name === "optout") {
       setOptoutNamingError(
         "The page name 'optout' requires 'User Management' as the category. Please select 'User Management' below."
+      );
+      return;
+    }
+    const alphanumericRegex = /^\d*[a-zA-Z0-9][a-zA-Z0-9]*$/;
+    const allowDashInName = name.replace(new RegExp("-", "g"), "");
+    if (!allowDashInName.match(alphanumericRegex)) {
+      setNamingError(
+        "Page names can only contain alphanumeric characters and dashes."
       );
       return;
     }
