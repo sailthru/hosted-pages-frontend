@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { colorTextErrorOnLight } from "@sailthru/design-tokens";
+import {colorTextErrorOnLight} from "@sailthru/design-tokens";
 import {
   FormGroup,
   Radio,
@@ -37,9 +37,9 @@ function CreatePageForm({
       );
       return;
     }
-    const alphanumericRegex = /^\d*[a-zA-Z0-9][a-zA-Z0-9]*$/;
-    const allowDashInName = name.replace(new RegExp("-", "g"), "");
-    if (!allowDashInName.match(alphanumericRegex)) {
+    const alphanumericRegex = /^[a-zA-Z0-9]+$/;
+    const nameWithoutDashes = name.replace(new RegExp("-", "g"), "");
+    if (!nameWithoutDashes.match(alphanumericRegex)) {
       setNamingError(
         "Page names can only contain alphanumeric characters and dashes."
       );
@@ -66,6 +66,11 @@ function CreatePageForm({
     <Fieldset>
       <FormGroup>
         <Label error={namingError}>Name</Label>
+        <Subtext>
+          Page name must follow URL standards and only contain alphanumeric
+          characters and dashes. It is recommended to use dashes instead of
+          spaces.
+        </Subtext>
         <Input
           autoFocus
           value={name}
@@ -76,14 +81,9 @@ function CreatePageForm({
         {namingError ? (
           <p style={{ color: colorTextErrorOnLight }}>{namingError}</p>
         ) : null}
-        <Subtext>
-          Page name must follow URL standards and only contain alphanumeric
-          characters and dashes. It is recommended to use dashes instead of
-          spaces.
-        </Subtext>
         <Label>Category</Label>
         {optoutNamingError ? (
-          <p style={{ color: colorTextErrorOnLight }}>{optoutNamingError}</p>
+          <Subtext>{optoutNamingError}</Subtext>
         ) : null}
         <RadioGroup>
           <Radio
