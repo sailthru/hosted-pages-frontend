@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { PageTable } from "./PageTable";
-import { CreatePageModal } from "./features/CreatePage/CreatePageModal";
+import { CreatePageModal } from "./CreatePage/CreatePageModal";
 
 import * as pagesApi from "../core/pagesApi";
 import { ListLayout } from "@sailthru/stui-layouts";

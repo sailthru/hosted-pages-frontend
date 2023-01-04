@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { Modal, Notification } from "@sailthru/stui-components";
-import * as pagesApi from "../../../core/pagesApi";
+import * as pagesApi from "../../core/pagesApi";
 import { CreatePageForm } from "./CreatePageForm";
 
 function CreatePageModal({ title, mode, setDisplayModal }) {
