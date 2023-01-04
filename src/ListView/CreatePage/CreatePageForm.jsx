@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {colorTextErrorOnLight} from "@sailthru/design-tokens";
+import { colorTextErrorOnLight } from "@sailthru/design-tokens";
 import {
   FormGroup,
   Radio,
@@ -82,9 +82,7 @@ function CreatePageForm({
           <p style={{ color: colorTextErrorOnLight }}>{namingError}</p>
         ) : null}
         <Label>Category</Label>
-        {optoutNamingError ? (
-          <Subtext>{optoutNamingError}</Subtext>
-        ) : null}
+        {optoutNamingError ? <Subtext>{optoutNamingError}</Subtext> : null}
         <RadioGroup>
           <Radio
             id="signup"
