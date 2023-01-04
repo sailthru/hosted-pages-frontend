@@ -27,16 +27,18 @@ function CreatePageForm({
       return;
     }
     if (!allowDashInName.match(alphanumericRegex)) {
-      setNamingError("Page names must be alphanumeric.");
+      setNamingError(
+        "Page names can only contain alphanumeric characters and dashes."
+      );
       return;
     }
     if (name === "oc") {
       setNamingError(
-        "The page name 'oc' is a reserved page name. Please select a new page name."
+        "The name 'oc' is a reserved page name. Please use a different page name."
       );
       return;
     }
-    if (name == "optout") {
+    if (name === "optout") {
       setOptoutNamingError(
         "The page name 'optout' requires 'User Management' as the category. Please select 'User Management' below."
       );
