@@ -18,7 +18,7 @@ function CreatePageForm({
   const [optoutNamingError, setOptoutNamingError] = useState("");
 
   // function to check for empty, alphanumeric, and 'oc' page names
-  const handleNamingError = function () {
+  const checkForNamingError = function () {
     setNamingError("");
     setOptoutNamingError("");
     if (name.length < 1) {
@@ -41,7 +41,7 @@ function CreatePageForm({
     const nameWithoutDashes = name.replace(new RegExp("-", "g"), "");
     if (!nameWithoutDashes.match(alphanumericRegex)) {
       setNamingError(
-        "Page names can only contain alphanumeric characters and dashes."
+        "The page name must only contain alphanumeric characters and dashes. Please use a different page name."
       );
       return;
     }
@@ -50,14 +50,17 @@ function CreatePageForm({
   // sets the error if the name is a duplicate (returned from the backend)
   useEffect(() => {
     if (isDuplicateName) {
-      setNamingError(isDuplicateName);
+      setNamingError(
+        "The page name must be unique. Please use a different page name."
+      );
     }
   }, [isDuplicateName]);
 
   // function to reset the name error when the name is changed
-  const onChangeResetNamingError = (e) => {
+  const onChangeHandler = (e) => {
     if (isNameChanged) {
       setNamingError("");
+      setOptoutNamingError("");
     }
     onChange({ name: e.target.value });
   };
@@ -74,8 +77,8 @@ function CreatePageForm({
         <Input
           autoFocus
           value={name}
-          onChange={onChangeResetNamingError}
-          onBlur={handleNamingError}
+          onChange={onChangeHandler}
+          onBlur={checkForNamingError}
           error={namingError}
         />
         {namingError ? (

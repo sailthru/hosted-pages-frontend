@@ -6,7 +6,7 @@ import { CreatePageForm } from "./CreatePageForm";
 
 function CreatePageModal({ title, mode, setDisplayModal }) {
   const [state, setState] = useState({});
-  const [error, setError] = useState(false);
+  const [error, setError] = useState("");
   const [isDuplicateName, setIsDuplicateName] = useState(false);
   useEffect(() => {
     setIsDuplicateName(false);
@@ -21,20 +21,24 @@ function CreatePageModal({ title, mode, setDisplayModal }) {
           window.location.href = `${window.location.origin}${response._data.editor_url}`;
         } else {
           // this should never happen
-          setError("Something went wrong and we could not load the page.");
-          console.log("An error occurred redirecting to the new page");
+          setError(
+            // TODO move displaying this error to ListView (EPT-1713)
+            `Something went wrong and we could not load the new page: ${response._data.name}`
+          );
+          console.error(
+            `Error redirecting to page name:${JSON.stringify(response._data)}`
+          );
           window.location.href = `${window.location.origin}/hosted-pages-list`;
         }
         return response._data;
       })
       .catch(function (serverError) {
-        let duplicateNameError = "There is already a page named";
         let serverErrorMessage = serverError.error_message;
         if (
           serverErrorMessage &&
-          serverErrorMessage.includes(duplicateNameError)
+          serverErrorMessage.includes("There is already a page named")
         ) {
-          setIsDuplicateName("Unique page name required.");
+          setIsDuplicateName(true);
         } else {
           console.log("ERROR: ", serverError.error_message);
           setError(
@@ -54,7 +58,7 @@ function CreatePageModal({ title, mode, setDisplayModal }) {
   function handleFormChange(changedField) {
     const newState = Object.assign({}, state, changedField);
     const changedFieldKeys = Object.keys(changedField);
-    setError(false);
+    setError("");
     setState(newState);
     if (changedFieldKeys.includes("name")) {
       setIsNameChanged(true);
