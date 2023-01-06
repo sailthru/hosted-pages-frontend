@@ -68,8 +68,8 @@ function CreatePageForm({
   };
 
   const onOptoutChangeHandler = (e) => {
-    if (name === "optout") {
-      setOptoutNamingError(" "); //this must be a space and not an empty string or the error will clear
+    if (name !== "optout") {
+      setOptoutNamingError("");
     }
     onChange({ type: e.target.value });
   };
