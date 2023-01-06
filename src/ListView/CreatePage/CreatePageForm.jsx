@@ -18,7 +18,6 @@ function CreatePageForm({
   const [namingError, setNamingError] = useState("");
   const [optoutNamingError, setOptoutNamingError] = useState("");
 
-  // function to check for empty, alphanumeric, and 'oc' page names
   const checkForNamingError = function () {
     setNamingError("");
     setOptoutNamingError("");
@@ -52,7 +51,6 @@ function CreatePageForm({
     }
   };
 
-  // sets the error if the name is a duplicate (returned from the backend)
   useEffect(() => {
     if (isDuplicateName) {
       setNamingError(
@@ -61,7 +59,6 @@ function CreatePageForm({
     }
   }, [isDuplicateName]);
 
-  // function to reset the name error when the name is changed
   const onChangeHandler = (e) => {
     if (isNameChanged) {
       setNamingError("");
