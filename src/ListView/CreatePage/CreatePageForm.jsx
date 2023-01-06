@@ -37,7 +37,6 @@ function CreatePageForm({
       setOptoutNamingError(
         "The page name 'optout' requires 'User Management' as the category. Please select 'User Management' below."
       );
-      setIsValidName(false);
       return;
     }
     const alphanumericRegex = /^[a-zA-Z0-9]+$/;
@@ -65,6 +64,13 @@ function CreatePageForm({
       setOptoutNamingError("");
     }
     onChange({ name: e.target.value });
+  };
+
+  const onOptoutChangeHandler = (e) => {
+    if (name === "optout") {
+      setOptoutNamingError(" "); //this must be a space and not an empty string or the error will clear
+    }
+    onChange({ type: e.target.value });
   };
 
   return (
@@ -103,10 +109,7 @@ function CreatePageForm({
             name="category"
             value="manage"
             disabled={namingError}
-            onChange={(e) => {
-              onChange({ type: e.target.value });
-              setOptoutNamingError(" ");
-            }}
+            onChange={onOptoutChangeHandler}
           >
             User Management
           </Radio>
