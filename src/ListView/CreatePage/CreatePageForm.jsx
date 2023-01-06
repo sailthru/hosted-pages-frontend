@@ -62,6 +62,7 @@ function CreatePageForm({
     if (isNameChanged) {
       setNamingError("");
       setOptoutNamingError("");
+      setIsValidName(true);
     }
     onChange({ name: e.target.value });
   };
