@@ -13,6 +13,7 @@ function CreatePageForm({
   onChange,
   isDuplicateName,
   isNameChanged,
+  setIsValidName,
 }) {
   const [namingError, setNamingError] = useState("");
   const [optoutNamingError, setOptoutNamingError] = useState("");
@@ -23,26 +24,30 @@ function CreatePageForm({
     setOptoutNamingError("");
     if (name.length < 1) {
       setNamingError("Please enter a page name.");
+      setIsValidName(false);
       return;
     }
     if (name === "oc") {
       setNamingError(
         "The name 'oc' is a reserved page name. Please use a different page name."
       );
+      setIsValidName(false);
       return;
     }
     if (name === "optout") {
       setOptoutNamingError(
         "The page name 'optout' requires 'User Management' as the category. Please select 'User Management' below."
       );
+      setIsValidName(false);
       return;
     }
     const alphanumericRegex = /^[a-zA-Z0-9]+$/;
     const nameWithoutDashes = name.replace(new RegExp("-", "g"), "");
     if (!nameWithoutDashes.match(alphanumericRegex)) {
       setNamingError(
-        "The page name must only contain alphanumeric characters and dashes. Please use a different page name."
+        "The page name must contain at least one alphanumeric character and may contain dashes. Please use a different page name."
       );
+      setIsValidName(false);
       return;
     }
   };

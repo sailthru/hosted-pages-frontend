@@ -12,6 +12,7 @@ function CreatePageModal({ title, mode, setDisplayModal }) {
     setIsDuplicateName(false);
   }, [isDuplicateName]);
   const [isNameChanged, setIsNameChanged] = useState(false);
+  const [isValidName, setIsValidName] = useState(true);
 
   function handleCreate() {
     pagesApi
@@ -26,7 +27,7 @@ function CreatePageModal({ title, mode, setDisplayModal }) {
             `Something went wrong and we could not load the new page: ${response._data.name}`
           );
           console.error(
-            `Error redirecting to page name:${JSON.stringify(response._data)}`
+            `Error redirecting to page: ${JSON.stringify(response._data)}`
           );
           window.location.href = `${window.location.origin}/hosted-pages-list`;
         }
@@ -42,7 +43,7 @@ function CreatePageModal({ title, mode, setDisplayModal }) {
         } else {
           console.log("ERROR: ", serverError.error_message);
           setError(
-            "An error occurred and the page could not be created. Please try again or contact support if the issue persists"
+            "An error occurred and the page could not be created. Please try again or contact support if the issue persists."
           );
         }
       });
@@ -69,7 +70,7 @@ function CreatePageModal({ title, mode, setDisplayModal }) {
     <Modal
       title={title}
       applyButtonText={getSubmitButtonText()}
-      disableApply={!state.name || !state.type}
+      disableApply={!state.name || !state.type || !isValidName}
       onApply={handleCreate}
       onDismiss={() => setDisplayModal(false)}
     >
@@ -79,6 +80,7 @@ function CreatePageModal({ title, mode, setDisplayModal }) {
         onChange={handleFormChange}
         isDuplicateName={isDuplicateName}
         isNameChanged={isNameChanged}
+        setIsValidName={setIsValidName}
       />
     </Modal>
   );
