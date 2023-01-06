@@ -70,7 +70,12 @@ function CreatePageModal({ title, mode, setDisplayModal }) {
     <Modal
       title={title}
       applyButtonText={getSubmitButtonText()}
-      disableApply={!state.name || !state.type || !isValidName}
+      disableApply={
+        !state.name ||
+        !state.type ||
+        !isValidName ||
+        (state.name === "optout" && state.type !== "manage")
+      }
       onApply={handleCreate}
       onDismiss={() => setDisplayModal(false)}
     >

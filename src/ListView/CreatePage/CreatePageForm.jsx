@@ -19,8 +19,6 @@ function CreatePageForm({
   const [optoutNamingError, setOptoutNamingError] = useState("");
 
   const checkForNamingError = function () {
-    setNamingError("");
-    setOptoutNamingError("");
     if (name.length < 1) {
       setNamingError("Please enter a page name.");
       setIsValidName(false);
