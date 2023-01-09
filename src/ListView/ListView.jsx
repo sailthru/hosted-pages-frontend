@@ -1,11 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { PageTable } from "./PageTable";
+import { CreatePageModal } from "./CreatePage/CreatePageModal";
 
-import * as pagesApi from "../core/api";
+import * as pagesApi from "../core/pagesApi";
+import { ListLayout } from "@sailthru/stui-layouts";
+import { Button } from "@sailthru/stui-elements";
+import { ModalWrapper } from "@sailthru/stui-components";
 
 function ListView() {
   const [loading, setLoading] = useState(true); // load from the start to prevent blip
   const [pageMap, setPageMap] = useState({});
+  const pagesData = useMemo(
+    () => [...Object.values(pageMap)],
+    [Object.values(pageMap)]
+  );
+  const [displayModal, setDisplayModal] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [mode, setMode] = useState();
   useEffect(getPages, []);
 
   function getPages() {
@@ -39,11 +50,36 @@ function ListView() {
   }
 
   return (
-    <PageTable
-      loading={loading}
-      pages={Object.values(pageMap)}
-      getPageById={getPageById}
-    />
+    <>
+      <ListLayout
+        pageTitle="Hosted Pages"
+        cta={
+          <Button
+            onClick={() => {
+              setModalTitle(() => "New HTML Page");
+              setMode(() => "html");
+              setDisplayModal((state) => !state);
+            }}
+          >
+            New Page
+          </Button>
+        }
+      >
+        <PageTable
+          loading={loading}
+          pages={pagesData}
+          getPageById={getPageById}
+        />
+      </ListLayout>
+
+      <ModalWrapper display={displayModal}>
+        <CreatePageModal
+          title={modalTitle}
+          mode={mode}
+          setDisplayModal={setDisplayModal}
+        />
+      </ModalWrapper>
+    </>
   );
 }
 
