@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState} from "react";
 
 import { Table } from "@sailthru/stui-components";
 import { PageTableHoverOptions } from "./PageTableHoverOptions";
+import { ResultNotification } from "../shared/ResultNotification";
+
 
 /** Configures STUI Table to render data in columns */
 function PageTable({ loading, pages, getPageById }) {
+  const [notificationType, setNotificationType] = useState("");
+  const [pageDeletedMessage, setPageDeletedMessage] = useState("");
   const columns = React.useMemo(
     () => [
       {
@@ -81,6 +85,9 @@ function PageTable({ loading, pages, getPageById }) {
           <PageTableHoverOptions
             pageId={cell.value.pageId}
             pageEditorUrl={cell.value.editorUrl}
+            pageName={cell.value.name}
+            setNotificationType={setNotificationType}
+            setPageDeletedMessage={setPageDeletedMessage}
           />
         ),
       },
@@ -89,19 +96,26 @@ function PageTable({ loading, pages, getPageById }) {
   );
 
   return (
-    <Table
-      isLoading={loading}
-      columns={columns}
-      data={pages}
-      enableTextWrap={true}
-      totalItems={pages.length}
-      pageSize={20}
-      pageIndex={0}
-      plugins={{
-        columnSort: true,
-        pagination: true,
-      }}
-    />
+    <>
+      <ResultNotification
+        display={notificationType}
+        message={pageDeletedMessage}
+        type={notificationType}
+      />
+      <Table
+        isLoading={loading}
+        columns={columns}
+        data={pages}
+        enableTextWrap={true}
+        totalItems={pages.length}
+        pageSize={20}
+        pageIndex={0}
+        plugins={{
+          columnSort: true,
+          pagination: true,
+        }}
+      />
+    </>
   );
 }
 
