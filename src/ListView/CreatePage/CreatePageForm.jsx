@@ -13,22 +13,22 @@ function CreatePageForm({
   onChange,
   isDuplicateName,
   isNameChanged,
+  setIsValidName,
 }) {
   const [namingError, setNamingError] = useState("");
   const [optoutNamingError, setOptoutNamingError] = useState("");
 
-  // function to check for empty, alphanumeric, and 'oc' page names
   const checkForNamingError = function () {
-    setNamingError("");
-    setOptoutNamingError("");
     if (name.length < 1) {
       setNamingError("Please enter a page name.");
+      setIsValidName(false);
       return;
     }
     if (name === "oc") {
       setNamingError(
         "The name 'oc' is a reserved page name. Please use a different page name."
       );
+      setIsValidName(false);
       return;
     }
     if (name === "optout") {
@@ -41,13 +41,13 @@ function CreatePageForm({
     const nameWithoutDashes = name.replace(new RegExp("-", "g"), "");
     if (!nameWithoutDashes.match(alphanumericRegex)) {
       setNamingError(
-        "The page name must only contain alphanumeric characters and dashes. Please use a different page name."
+        "The page name must contain at least one alphanumeric character and may contain dashes. Please use a different page name."
       );
+      setIsValidName(false);
       return;
     }
   };
 
-  // sets the error if the name is a duplicate (returned from the backend)
   useEffect(() => {
     if (isDuplicateName) {
       setNamingError(
@@ -56,13 +56,20 @@ function CreatePageForm({
     }
   }, [isDuplicateName]);
 
-  // function to reset the name error when the name is changed
   const onChangeHandler = (e) => {
     if (isNameChanged) {
       setNamingError("");
       setOptoutNamingError("");
+      setIsValidName(true);
     }
     onChange({ name: e.target.value });
+  };
+
+  const onOptoutChangeHandler = (e) => {
+    if (name !== "optout") {
+      setOptoutNamingError("");
+    }
+    onChange({ type: e.target.value });
   };
 
   return (
@@ -101,10 +108,7 @@ function CreatePageForm({
             name="category"
             value="manage"
             disabled={namingError}
-            onChange={(e) => {
-              onChange({ type: e.target.value });
-              setOptoutNamingError(" ");
-            }}
+            onChange={onOptoutChangeHandler}
           >
             User Management
           </Radio>
