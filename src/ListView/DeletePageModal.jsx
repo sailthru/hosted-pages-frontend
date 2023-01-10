@@ -3,7 +3,8 @@ import { Modal } from "@sailthru/stui-components";
 import { deletePage } from "../core/pagesApi";
 
 const PageSuccessDeleteMessage = "Page successfully deleted.";
-const PageErrorDeleteMessage = "Page was unable to be deleted, please try again later.";
+const PageErrorDeleteMessage =
+  "Page was unable to be deleted, please try again later.";
 
 function DeletePageModal({
   pageId,
@@ -11,27 +12,26 @@ function DeletePageModal({
   setDisplayDeleteModal,
   setNotificationType,
   setPageDeletedMessage,
-  }) {
+}) {
   const [disableSubmitButton, setDisableSubmitButton] = useState(false);
 
   function handleSubmit() {
     setDisableSubmitButton(true);
     deletePage(pageId)
-      .then( function () {
-        setNotificationType('success');
+      .then(function () {
+        setNotificationType("success");
         setPageDeletedMessage(PageSuccessDeleteMessage);
         return true;
       })
-      .catch( function (error) {
+      .catch(function (error) {
         console.log("Error deleting page", error);
-        setNotificationType('error');
+        setNotificationType("error");
         setPageDeletedMessage(PageErrorDeleteMessage);
       })
-      .finally( function () {
+      .finally(function () {
         setDisplayDeleteModal(false);
-        (window.location.href = `${window.location.origin}/hosted-pages-list`);
-      }
-      );
+        window.location.href = `${window.location.origin}/hosted-pages-list`;
+      });
   }
   return (
     <Modal

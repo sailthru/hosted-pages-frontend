@@ -12,7 +12,7 @@ function PageTableHoverOptions({
   pageName,
   setNotificationType,
   setPageDeletedMessage,
-  }) {
+}) {
   const [displayDeleteModal, setDisplayDeleteModal] = useState(false);
 
   const clickOptions = [

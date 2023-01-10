@@ -1,9 +1,8 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 
 import { Table } from "@sailthru/stui-components";
 import { PageTableHoverOptions } from "./PageTableHoverOptions";
 import { ResultNotification } from "../shared/ResultNotification";
-
 
 /** Configures STUI Table to render data in columns */
 function PageTable({ loading, pages, getPageById }) {
