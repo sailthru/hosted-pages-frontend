@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 
 import { Table } from "@sailthru/stui-components";
 import { PageTableHoverOptions } from "./PageTableHoverOptions";
-import { ResultNotification } from "../shared/ResultNotification";
 
 /** Configures STUI Table to render data in columns */
-function PageTable({ loading, pages, getPageById }) {
-  const [notificationType, setNotificationType] = useState("");
-  const [pageDeletedMessage, setPageDeletedMessage] = useState("");
+function PageTable({
+  loading,
+  pages,
+  getPageById,
+  setNotificationType,
+  setNotificationMessage,
+}) {
   const columns = React.useMemo(
     () => [
       {
@@ -86,7 +89,7 @@ function PageTable({ loading, pages, getPageById }) {
             pageEditorUrl={cell.value.editorUrl}
             pageName={cell.value.name}
             setNotificationType={setNotificationType}
-            setPageDeletedMessage={setPageDeletedMessage}
+            setNotificationMessage={setNotificationMessage}
           />
         ),
       },
@@ -96,11 +99,6 @@ function PageTable({ loading, pages, getPageById }) {
 
   return (
     <>
-      <ResultNotification
-        display={notificationType}
-        message={pageDeletedMessage}
-        type={notificationType}
-      />
       <Table
         isLoading={loading}
         columns={columns}

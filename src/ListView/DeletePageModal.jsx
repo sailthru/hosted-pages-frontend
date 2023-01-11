@@ -29,10 +29,10 @@ function DeletePageModal({
         setPageDeletedMessage(PageErrorDeleteMessage);
       })
       .finally(function () {
-        setDisplayDeleteModal(false);
-        window.location.href = `${window.location.origin}/hosted-pages-list`;
+        window.location.href = "/hosted-pages-list";
       });
   }
+
   return (
     <Modal
       title="Delete Page"

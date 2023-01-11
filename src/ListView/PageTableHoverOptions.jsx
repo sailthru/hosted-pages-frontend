@@ -11,7 +11,7 @@ function PageTableHoverOptions({
   pageEditorUrl,
   pageName,
   setNotificationType,
-  setPageDeletedMessage,
+  setNotificationMessage,
 }) {
   const [displayDeleteModal, setDisplayDeleteModal] = useState(false);
 
@@ -27,7 +27,7 @@ function PageTableHoverOptions({
       icon: "fal fa-trash fa-fw",
       iconHover: "fas fa-trash fa-fw",
       onClick: () => {
-        setDisplayDeleteModal(true);
+        setDisplayDeleteModal((state) => !state);
       },
     },
   ];
@@ -44,7 +44,7 @@ function PageTableHoverOptions({
           pageName={pageName}
           setDisplayDeleteModal={setDisplayDeleteModal}
           setNotificationType={setNotificationType}
-          setPageDeletedMessage={setPageDeletedMessage}
+          setPageDeletedMessage={setNotificationMessage}
         />
       </ModalWrapper>
     </>
