@@ -1,0 +1,7 @@
+.notifier {
+    position: fixed;
+    top: 90%;
+    z-index: 1;
+    left: 50%;
+    transform: translateX(-50%);
+}

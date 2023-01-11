@@ -32,6 +32,13 @@ module.exports = function ({ basePath }) {
           test: /\.(png|jpg|gif|svg)(\?[\s\S]+)?$/,
           type: "asset/resource",
         },
+        {
+          test: /\.css$/,
+          use: [
+            'style-loader',
+            'css-loader'
+          ]
+        },
       ],
     },
     resolve: {
